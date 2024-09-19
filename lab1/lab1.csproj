@@ -104,6 +104,9 @@
         <Compile Include="Tools\Weather.cs" />
         <Compile Include="Tools\WeatherEffect.cs" />
     </ItemGroup>
+    <ItemGroup>
+      <Content Include="LAB1.md" />
+    </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
          Other similar extension points exist, see Microsoft.Common.targets.
