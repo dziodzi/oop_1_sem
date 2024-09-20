@@ -1,6 +1,6 @@
 ﻿namespace lab1.Tools;
 
-public enum Weather
+public enum WeatherType
 {
     Sunny,
     Rainy,
