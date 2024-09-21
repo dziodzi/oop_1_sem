@@ -20,12 +20,15 @@ public class RaceService(double distance, RaceEnums enums, WeatherEnums weather)
         _participants.Add(transport);
     }
 
-    public void RegisterVehicles(List<Vehicle> transports)
+    public bool RegisterVehicles(List<Vehicle> transports)
     {
+        if (transports.Count == 0) return false;
         foreach (var transport in transports)
         {
             RegisterVehicle(transport);
         }
+
+        return true;
     }
 
     public List<KeyValuePair<Vehicle, double>> StartRace()
