@@ -1,11 +1,7 @@
-﻿using System;
+﻿namespace lab1.Entities.VehicleRealisations;
 
-namespace lab1.Entities.VehicleRealisations;
-
-class Carpet : AirVehicle
+internal class Carpet() : AirVehicle ("Magic Carpet", 20.0)
 {
-    public Carpet() : base("Magic Carpet", 20.0) { }
-
     protected override double GetSpeedRaise(double distance)
     {
         return Math.Abs(Math.Sin(distance)) / 5;

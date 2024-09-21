@@ -1,8 +1,6 @@
-﻿using System;
+﻿namespace lab1.Entities.VehicleRealisations;
 
-namespace lab1.Entities.VehicleRealisations;
-
-class FlyingShip() : AirVehicle("Flying Ship", 3.0)
+internal class FlyingShip() : AirVehicle("Flying Ship", 3.0)
 {
     protected override double GetSpeedRaise(double distance)
     {

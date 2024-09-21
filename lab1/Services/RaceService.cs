@@ -1,34 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using lab1.Entities;
+﻿using lab1.Entities;
 using lab1.Exceptions;
 using lab1.Tools;
 
 namespace lab1.Services;
 
-public class RaceService(double distance, RaceType type, WeatherType weather)
+public class RaceService(double distance, RaceEnums enums, WeatherEnums weather) : IRaceService
 {
-    public double Distance { get; } = distance;
-    public RaceType Type { get; } = type;
-    public WeatherType Weather { get; } = weather;
-    private List<Vehicle> Participants { get; } = new List<Vehicle>();
+    private readonly List<Vehicle> _participants = [];
 
-    public void RegisterVehicle(Vehicle transport)
+    private void RegisterVehicle(Vehicle transport)
     {
-        if ((Type == RaceType.Ground && transport is AirVehicle) ||
-            (Type == RaceType.Air && transport is GroundVehicle))
+        if ((enums == RaceEnums.Ground && transport is AirVehicle) ||
+            (enums == RaceEnums.Air && transport is GroundVehicle))
         {
             throw new InvalidParticipantTypeException(
-                $"The {transport.GetType().Name} participant is of an invalid type for {Type} race.");
+                $"The {transport.GetType().Name} participant is of an invalid type for {enums} race.");
         }
 
-        Participants.Add(transport);
+        _participants.Add(transport);
     }
 
     public void RegisterVehicles(List<Vehicle> transports)
     {
-        foreach (Vehicle transport in transports)
+        foreach (var transport in transports)
         {
             RegisterVehicle(transport);
         }
@@ -36,16 +30,16 @@ public class RaceService(double distance, RaceType type, WeatherType weather)
 
     public List<KeyValuePair<Vehicle, double>> StartRace()
     {
-        if (Participants.Count == 0)
+        if (_participants.Count == 0)
         {
             throw new NoRaceParticipantsException();
         }
 
         var results = new Dictionary<Vehicle, double>();
 
-        foreach (var transport in Participants)
+        foreach (var transport in _participants)
         {
-            double raceTime = transport.CalculateRaceTime(Distance) * (1 / GetWeatherImpact(transport));
+            var raceTime = transport.CalculateRaceTime(distance) * (1 / GetWeatherImpact(transport));
             results.Add(transport, raceTime);
         }
 
@@ -56,44 +50,30 @@ public class RaceService(double distance, RaceType type, WeatherType weather)
 
     private double GetWeatherImpact(Vehicle transport)
     {
-        switch (transport)
+        return transport switch
         {
-            case GroundVehicle:
-                switch (Weather)
-                {
-                    case WeatherType.Rainy:
-                        return 0.95;
-                    case WeatherType.Stormy:
-                        return 0.9;
-                    case WeatherType.Snowy:
-                        return 0.85;
-                    default:
-                        return 1.0;
-                }
+            GroundVehicle => weather switch
+            {
+                WeatherEnums.Rainy => 0.95,
+                WeatherEnums.Stormy => 0.9,
+                WeatherEnums.Snowy => 0.85,
+                _ => 1.0
+            },
+            AirVehicle => weather switch
+            {
+                WeatherEnums.Stormy => 0.25,
+                WeatherEnums.Snowy => 0.7,
+                WeatherEnums.Windy => 0.5,
+                WeatherEnums.Rainy => 0.8,
+                WeatherEnums.Cloudy => 0.9,
+                _ => 1.0
+            },
+            _ => 1.0
+        };
+    }
 
-                break;
-
-            case AirVehicle:
-                switch (Weather)
-                {
-                    case WeatherType.Stormy:
-                        return 0.25;
-                    case WeatherType.Snowy:
-                        return 0.7;
-                    case WeatherType.Windy:
-                        return 0.5;
-                    case WeatherType.Rainy:
-                        return 0.8;
-                    case WeatherType.Cloudy:
-                        return 0.9;
-                    default:
-                        return 1.0;
-                }
-
-                break;
-
-            default:
-                return 1.0;
-        }
+    public RaceEnums GetRaceType()
+    {
+        return enums;
     }
 }

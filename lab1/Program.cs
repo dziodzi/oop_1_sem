@@ -1,27 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using lab1.Entities;
-using lab1.Entities.VehicleRealisations;
-using lab1.Services;
+﻿using lab1.Services;
 using lab1.Tools;
 
 namespace lab1;
 
-static class Program
+internal static class Program
 {
     private static void Main()
     {
         Actions.OnStartAction();
 
-        RaceType type = Actions.InputRaceTypeAction();
+        var type = Actions.InputRaceTypeAction();
         
-        double distance = Actions.InputRaceDistanceAction();
+        var distance = Actions.InputRaceDistanceAction();
 
-        WeatherType weather = Actions.InputRaceWeatherAction();
+        var weather = Actions.InputRaceWeatherAction();
         
-        RaceService raceService = new RaceService(distance, type, weather);
+        var raceService = new RaceService(distance, type, weather);
 
-        raceService.RegisterVehicles(Actions.SelectParticipantsAction(raceService.Type));
+        raceService.RegisterVehicles(Actions.SelectParticipantsAction(raceService.GetRaceType()));
         
         var result = raceService.StartRace();
 

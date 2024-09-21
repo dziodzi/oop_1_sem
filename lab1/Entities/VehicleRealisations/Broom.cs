@@ -1,6 +1,6 @@
 ﻿namespace lab1.Entities.VehicleRealisations;
 
-class Broom() : AirVehicle("Broom", 25.0)
+internal class Broom() : AirVehicle("Broom", 25.0)
 {
     protected override double GetSpeedRaise(double distance)
     {

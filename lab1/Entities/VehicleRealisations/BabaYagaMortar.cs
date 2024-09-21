@@ -1,8 +1,6 @@
-﻿using System;
+﻿namespace lab1.Entities.VehicleRealisations;
 
-namespace lab1.Entities.VehicleRealisations;
-
-class BabaYagaMortar() : AirVehicle("Baba Yaga's Mortar", 15.0)
+internal class BabaYagaMortar() : AirVehicle("Baba Yaga's Mortar", 15.0)
 {
     protected override double GetSpeedRaise(double distance)
     {
